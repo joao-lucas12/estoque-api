@@ -15,11 +15,11 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public Produto salvar(Produto produto) {
+    public  Produto salvar(Produto produto) {
         return produtoRepository.save(produto);
     }
 
-    public List<Produto> listarTodos() {
+    public  List<Produto> listarTodos() {
         return produtoRepository.findAll();
     }
 
