@@ -1,5 +1,7 @@
 package estoque_api.controller;
 
+import estoque_api.dto.ProdutoRequestDTO;
+import estoque_api.dto.ProdutoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +18,17 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public Produto criar(@RequestBody Produto produto) {
-
-        return produtoService.salvar(produto);
+    public ProdutoResponseDTO criar(@RequestBody ProdutoRequestDTO produtoRequestDto) {
+        return produtoService.salvar(produtoRequestDto);
     }
 
     @GetMapping
-    public List<Produto> listarTodos(){
+    public List<ProdutoResponseDTO> listarTodos(){
         return produtoService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Produto buscarPorId(@PathVariable Long id){
+    public ProdutoResponseDTO buscarPorId(@PathVariable Long id){
         return produtoService.buscarPorId(id);
     }
 
@@ -37,7 +38,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto atualizar(@PathVariable Long id, @RequestBody Produto produtoAtualizado) {
+    public ProdutoResponseDTO atualizar(@PathVariable Long id, @RequestBody Produto produtoAtualizado) {
        return produtoService.atualizar(id, produtoAtualizado);
     }
 }
