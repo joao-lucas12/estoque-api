@@ -43,16 +43,16 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
-    public ProdutoResponseDTO atualizar(Long id, Produto produtoAtualizado) {
+    public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto) {
         Produto produtoExistente = produtoRepository.findById(id)
                 .orElseThrow(() -> new ProdutoNaoEncontradoException(
                         "Produto não encontrado com id: " + id));
 
-        produtoExistente.setNome(produtoAtualizado.getNome());
-        produtoExistente.setDescricao(produtoAtualizado.getDescricao());
-        produtoExistente.setPreco(produtoAtualizado.getPreco());
-        produtoExistente.setQuantidadeEstoque(produtoAtualizado.getQuantidadeEstoque());
-        produtoExistente.setCategoria(produtoAtualizado.getCategoria());
+        produtoExistente.setNome(dto.getNome());
+        produtoExistente.setDescricao(dto.getDescricao());
+        produtoExistente.setPreco(dto.getPreco());
+        produtoExistente.setQuantidadeEstoque(dto.getQuantidadeEstoque());
+        produtoExistente.setCategoria(dto.getCategoria());
 
         Produto produtoSalvo = produtoRepository.save(produtoExistente);
 
