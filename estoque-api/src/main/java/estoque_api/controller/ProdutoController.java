@@ -2,6 +2,7 @@ package estoque_api.controller;
 
 import estoque_api.dto.ProdutoRequestDTO;
 import estoque_api.dto.ProdutoResponseDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public ProdutoResponseDTO criar(@RequestBody ProdutoRequestDTO produtoRequestDto) {
+    public ProdutoResponseDTO criar(@Valid @RequestBody ProdutoRequestDTO produtoRequestDto) {
         return produtoService.salvar(produtoRequestDto);
     }
 
@@ -37,7 +38,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ProdutoResponseDTO atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO dto) {
+    public ProdutoResponseDTO atualizar(@Valid @PathVariable Long id, @RequestBody ProdutoRequestDTO dto) {
        return produtoService.atualizar(id, dto);
     }
 }
