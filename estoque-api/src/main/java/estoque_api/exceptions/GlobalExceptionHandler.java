@@ -33,4 +33,9 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(NomeProdutoDuplicadoException.class)
+    public ResponseEntity<String> tratarNomeDuplicado(NomeProdutoDuplicadoException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
 }
