@@ -2,6 +2,7 @@ package estoque_api.service;
 
 import estoque_api.dto.ProdutoRequestDTO;
 import estoque_api.dto.ProdutoResponseDTO;
+import estoque_api.exceptions.NomeProdutoDuplicadoException;
 import estoque_api.exceptions.ProdutoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,10 @@ public class ProdutoService {
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto) {
         Produto produtoExistente = buscarEntidade(id);
 
+        if(produtoRepository.existsByNome(dto.getNome()) && !produtoExistente.getNome().equals(dto.getNome())){
+            throw new NomeProdutoDuplicadoException("Produto com o nome: " + dto.getNome() + " já cadastrado");
+        }
+
         produtoExistente.setNome(dto.getNome());
         produtoExistente.setDescricao(dto.getDescricao());
         produtoExistente.setPreco(dto.getPreco());
@@ -73,6 +78,10 @@ public class ProdutoService {
         produto.setQuantidadeEstoque(dto.getQuantidadeEstoque());
         produto.setCategoria(dto.getCategoria());
 
+        if(produtoRepository.existsByNome(dto.getNome())){
+            throw new NomeProdutoDuplicadoException("Produto com o nome: " + dto.getNome() + " já cadastrado");
+        }
+
         Produto produtoBanco = produtoRepository.save(produto);
         return converterParaDto(produtoBanco);
     }
@@ -89,6 +98,7 @@ public class ProdutoService {
 
         return produtoDto;
     }
+
 
 
 
