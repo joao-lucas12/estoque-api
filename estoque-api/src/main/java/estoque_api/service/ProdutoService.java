@@ -31,26 +31,27 @@ public class ProdutoService {
 
     }
 
-    public ProdutoResponseDTO buscarPorId(Long id) {
-        Produto produto = produtoRepository.findById(id)
+    private Produto buscarEntidade(Long id){
+        return produtoRepository.findById(id)
                 .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto não encontrado com id: " + id));
+    }
+
+    public ProdutoResponseDTO buscarPorId(Long id) {
+
+        Produto produto = buscarEntidade(id);
 
         return converterParaDto(produto);
     }
 
     public void deletar(Long id) {
 
-        if (!produtoRepository.existsById(id)){
-            throw new ProdutoNaoEncontradoException("Produto não encontrado com id: " + id);
-        }
+       buscarEntidade(id);
 
         produtoRepository.deleteById(id);
     }
 
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto) {
-        Produto produtoExistente = produtoRepository.findById(id)
-                .orElseThrow(() -> new ProdutoNaoEncontradoException(
-                        "Produto não encontrado com id: " + id));
+        Produto produtoExistente = buscarEntidade(id);
 
         produtoExistente.setNome(dto.getNome());
         produtoExistente.setDescricao(dto.getDescricao());
