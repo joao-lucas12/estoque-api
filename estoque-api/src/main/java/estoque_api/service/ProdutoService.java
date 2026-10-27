@@ -37,6 +37,14 @@ public class ProdutoService {
                 .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto não encontrado com id: " + id));
     }
 
+    private void validarNomeDisponivel(String nome) {
+        if (produtoRepository.existsByNome(nome)) {
+            throw new NomeProdutoDuplicadoException(
+                    "Produto com o nome: " + nome + " já cadastrado"
+            );
+        }
+    }
+
     public ProdutoResponseDTO buscarPorId(Long id) {
 
         Produto produto = buscarEntidade(id);
@@ -54,8 +62,8 @@ public class ProdutoService {
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto) {
         Produto produtoExistente = buscarEntidade(id);
 
-        if(produtoRepository.existsByNome(dto.getNome()) && !produtoExistente.getNome().equals(dto.getNome())){
-            throw new NomeProdutoDuplicadoException("Produto com o nome: " + dto.getNome() + " já cadastrado");
+        if(!produtoExistente.getNome().equals(dto.getNome())){
+            validarNomeDisponivel(dto.getNome());
         }
 
         produtoExistente.setNome(dto.getNome());
@@ -70,6 +78,9 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO salvar(ProdutoRequestDTO dto) {
+
+        validarNomeDisponivel(dto.getNome());
+
         Produto produto = new Produto();
 
         produto.setNome(dto.getNome());
@@ -78,11 +89,8 @@ public class ProdutoService {
         produto.setQuantidadeEstoque(dto.getQuantidadeEstoque());
         produto.setCategoria(dto.getCategoria());
 
-        if(produtoRepository.existsByNome(dto.getNome())){
-            throw new NomeProdutoDuplicadoException("Produto com o nome: " + dto.getNome() + " já cadastrado");
-        }
-
         Produto produtoBanco = produtoRepository.save(produto);
+
         return converterParaDto(produtoBanco);
     }
 
